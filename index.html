@@ -12,8 +12,8 @@
 <h1>CAN WALL ART</h1>
 <div class="subtitle">15 × 10 Grid · Germany Edition · Click to paint</div>
 
-<div class="layout">
- 
+<div class="layout"  id="layout">
+  <!-- Sidebar palette -->
   <div class="sidebar">
     <h2>Select Can</h2>
     <div id="palette"></div>
@@ -26,17 +26,17 @@
     </div>
   </div>
 
-  
+  <!-- Main grid -->
   <div class="grid-wrapper">
     <div class="grid-meta">
-      15 cols × 10 rows &nbsp;|&nbsp; ~990mm wide × 1200mm tall &nbsp;|&nbsp; 150 cans total
+      <span id ="cols">15</span> cols × <span id ="rows">10</span> rows &nbsp;|&nbsp; ~<span class ="structurew" >~990</span>mm wide × <span class ="structureh">~1200</span>mm tall &nbsp;|&nbsp; <span class="canCount">150</span> cans total
     </div>
     <div class="can-grid" id="grid"></div>
 
     <div class="info-strip">
-      <div class="info-box">Total cans<span>150</span></div>
-      <div class="info-box">Wall width<span>~99 cm</span></div>
-      <div class="info-box">Wall height<span>~120 cm</span></div>
+      <div class="info-box">Total cans<span class="canCount">150</span></div>
+      <div class="info-box">Wall width<span class ="structurew" >~99cm</span></div>
+      <div class="info-box">Wall height<span class ="structureh">~120cm</span></div>
       <div class="info-box">Can size (EU)<span>66 × 120 mm</span></div>
     </div>
 
