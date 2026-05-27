@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can Wall Art Designer</title>
+<link rel="stylesheet" href="styles.css">
+<script src="scripts.js" defer></script>
+</head>
+<body>
+
+<h1>CAN WALL ART</h1>
+<div class="subtitle">15 × 10 Grid · Germany Edition · Click to paint</div>
+
+<div class="layout">
+ 
+  <div class="sidebar">
+    <h2>Select Can</h2>
+    <div id="palette"></div>
+    <div style="margin-top:16px; border-top:1px solid #222; padding-top:14px;">
+      <h2 style="margin-bottom:10px;">Tools</h2>
+      <div class="can-option" id="eraser-btn" onclick="selectEraser()">
+        <div class="can-preview" style="background:#1a1a1a; border:1px dashed #444;"></div>
+        <div class="can-label">Erase</div>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="grid-wrapper">
+    <div class="grid-meta">
+      15 cols × 10 rows &nbsp;|&nbsp; ~990mm wide × 1200mm tall &nbsp;|&nbsp; 150 cans total
+    </div>
+    <div class="can-grid" id="grid"></div>
+
+    <div class="info-strip">
+      <div class="info-box">Total cans<span>150</span></div>
+      <div class="info-box">Wall width<span>~99 cm</span></div>
+      <div class="info-box">Wall height<span>~120 cm</span></div>
+      <div class="info-box">Can size (EU)<span>66 × 120 mm</span></div>
+    </div>
+
+    <div class="controls">
+      <button onclick="fillAll()">Fill All → Selected</button>
+      <button onclick="clearAll()">Clear All</button>
+      <button onclick="loadPreset('diagonal')">Preset: Diagonal</button>
+      <button onclick="loadPreset('flag')">Preset: DE Flag</button>
+      <button onclick="loadPreset('chaos')">Preset: Random</button>
+    </div>
+
+    <div class="legend" id="legend"></div>
+    <div class="mode-hint" id="mode-hint">Mode: Paint · Click or drag to paint</div>
+  </div>
+</div>
+
+
+</body>
+</html>
