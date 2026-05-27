@@ -14,3 +14,9 @@ Additional features:
                b. DE flag:  Creates the Deutschland(German) flag with cans closer to the colours
                c. Random:   Creates a wall with random sodas
 
+
+Changes made - 
+
+1. Changed the can selection and also changed the cans from gradients to images of actual cans for better mocks.
+2. Changed it from a fixed sized grid to a grid based on user input for number of cans across and down.
+3. Changed functions accrodingly for above updates.
