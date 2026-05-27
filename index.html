@@ -11,9 +11,20 @@
 
 <h1>CAN WALL ART</h1>
 <div class="subtitle">15 × 10 Grid · Germany Edition · Click to paint</div>
+<div class="inputs" id="input" >
 
-<div class="layout"  id="layout">
-  <!-- Sidebar palette -->
+  Enter the number of cans across(width) and down(height)
+  <br>
+  <label for="width">Width</label> <br>
+  <input type="number" name="width" id="width">
+  <br>
+  <label for="height">Height</label> <br>
+  <input type="number" name="height" id="height">
+<br>
+<button type="submit" onclick="gridConst()">Build!</button>
+</div>
+<div class="layout" style="display:none;" id="layout">
+ 
   <div class="sidebar">
     <h2>Select Can</h2>
     <div id="palette"></div>
@@ -29,14 +40,14 @@
   <!-- Main grid -->
   <div class="grid-wrapper">
     <div class="grid-meta">
-      <span id ="cols">15</span> cols × <span id ="rows">10</span> rows &nbsp;|&nbsp; ~<span class ="structurew" >~990</span>mm wide × <span class ="structureh">~1200</span>mm tall &nbsp;|&nbsp; <span class="canCount">150</span> cans total
+      <span id ="cols"> </span> cols × <span id ="rows"> </span> rows &nbsp;|&nbsp; ~<span class ="structurew" ></span>cm wide × <span class ="structureh"></span>cm tall &nbsp;|&nbsp; <span class="canCount"></span> cans total
     </div>
     <div class="can-grid" id="grid"></div>
 
     <div class="info-strip">
-      <div class="info-box">Total cans<span class="canCount">150</span></div>
-      <div class="info-box">Wall width<span class ="structurew" >~99cm</span></div>
-      <div class="info-box">Wall height<span class ="structureh">~120cm</span></div>
+      <div class="info-box">Total cans<span class="canCount"></span></div>
+      <div class="info-box">Wall width<span class ="structurew" ></span>cm</div>
+      <div class="info-box">Wall height<span class ="structureh"></span>cm</div>
       <div class="info-box">Can size (EU)<span>66 × 120 mm</span></div>
     </div>
 
@@ -52,7 +63,6 @@
     <div class="mode-hint" id="mode-hint">Mode: Paint · Click or drag to paint</div>
   </div>
 </div>
-
 
 </body>
 </html>

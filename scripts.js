@@ -19,49 +19,7 @@ const CANS = [
   { id: "redbullwhite", name: "Red Bull White" },
 ];
 
-const gridEl = document.getElementById("grid");
 
-let selectedCan = CANS[0];
-let isErasing = false;
-let isPainting = false;
-let grid = Array(150).fill(null);
-const palette = document.getElementById("palette");
-CANS.forEach((can) => {
-  const el = document.createElement("div");
-  el.className = "can-option" + (can.id === selectedCan.id ? " selected" : "");
-  el.id = "opt-" + can.id;
-  el.innerHTML = `
-    <div class="can-preview" ">
-      <img class="canprevimg" src="images/${can.id}.png" alt="${can.name}">
-      </div>
-    <div class="can-label">${can.name}</div>
-  `;
-  el.addEventListener("click", () => selectCan(can));
-  palette.appendChild(el);
-});
-
-function gridConst() {
- 
-  const gridEl = document.getElementById("grid");
-  for (let i = 0; i < 150; i++) {
-    const cell = document.createElement("div");
-    cell.className = "can-cell";
-    cell.dataset.index = i;
-    cell.style.background = "#1a1a1a";
-    cell.addEventListener("mousedown", (e) => {
-      isPainting = true;
-      paint(i);
-    });
-    cell.addEventListener("mouseover", (e) => {
-      if (isPainting) paint(i);
-    });
-    gridEl.appendChild(cell);
-  }
-  document.addEventListener("mouseup", () => {
-    isPainting = false;
-  });
-}
-gridConst();
 // function paint(i) {
 //   const cells = gridEl.querySelectorAll(".can-cell");
 //   if (isErasing) {
@@ -76,117 +34,324 @@ gridConst();
 //   }
 // }
 
-function paint(i) {
-  const cells = gridEl.querySelectorAll(".can-cell");
+let gridWidth = 0;
+let gridHeight = 0;
 
-  if (isErasing) {
-    grid[i] = null;
+let grid = [];
+let selectedCan = null;
 
-    cells[i].innerHTML = ""; // remove image
-    cells[i].title = "";
-  } else {
-    grid[i] = selectedCan.id;
+let isPainting = false;
+let isErasing = false;
 
-    // Remove previous image if one exists
-    cells[i].innerHTML = "";
+const gridEl = document.getElementById('grid');
 
-    const img = document.createElement("img");
-    img.src = `images/${grid[i]}.png`;
-    img.alt = selectedCan.name;
-    img.classList.add("can-img");
 
-    cells[i].appendChild(img);
+// let selectedCan = CANS[0];
+// let isErasing = false;
+// let isPainting = false;
+// let grid = Array(150).fill(null); // null = empty
 
-    cells[i].title = selectedCan.name;
-  }
-}
+// Build palette
 
-function selectCan(can) {
-  selectedCan = can;
-  isErasing = false;
-  document
-    .querySelectorAll(".can-option")
-    .forEach((el) => el.classList.remove("selected"));
-  document.getElementById("opt-" + can.id)?.classList.add("selected");
-  document.getElementById("eraser-btn").classList.remove("selected");
-  document.getElementById("mode-hint").textContent =
-    "Mode: Paint · " + can.name;
-}
 
-function selectEraser() {
-  isErasing = true;
-  document
-    .querySelectorAll(".can-option")
-    .forEach((el) => el.classList.remove("selected"));
-  document.getElementById("eraser-btn").classList.add("selected");
-  document.getElementById("mode-hint").textContent = "Mode: Erase";
-}
 
-function fillAll() {
-  for (let i = 0; i < 225; i++) paint(i);
-}
 
-function clearAll() {
-  const cells = gridEl.querySelectorAll(".can-cell");
-  for (let i = 0; i < 225; i++) {
-    grid[i] = null;
-    cells[i].innerHTML = "";
-    cells[i].title = "";
-  }
-}
 
-function loadPreset(name) {
-  clearAll();
-  const cells = gridEl.querySelectorAll(".can-cell");
+// BUILD GRID
+function gridConst() {
 
-  function set(i, canId) {
-    const can = CANS.find((c) => c.id === canId);
-    if (!can) return;
-    grid[i] = canId;
-    cells[i].style.background = canBg(can);
-    cells[i].title = can.name;
-  }
 
-  if (name === "diagonal") {
-    // Diet Coke dominant, diagonal stripe of Coke Zero, Sprite accent
-    for (let r = 0; r < 10; r++) {
-      for (let c = 0; c < 15; c++) {
-        const i = r * 15 + c;
-        const d = (r + c) % 7;
-        if (d < 3) set(i, "diet-coke");
-        else if (d < 5) set(i, "coke-zero");
-        else set(i, "sprite");
-      }
+  document.getElementById('input').style.display = "none";
+  document.getElementById('layout').style.display = "flex";
+
+    gridWidth = parseInt(document.getElementById('width').value);
+    gridHeight = parseInt(document.getElementById('height').value);
+document.getElementById('cols').innerHTML = gridWidth;;
+document.getElementById('rows').innerHTML = gridHeight;
+// cols.innerHTML = gridWidth;
+// rows.innerHTML = gridHeight;
+ for(let i = 0; i<2; i++){
+    document.getElementsByClassName('canCount')[i].innerHTML = gridWidth*gridHeight;
+
+    document.getElementsByClassName('structureh')[i].innerHTML = gridHeight*120/10;
+
+  document.getElementsByClassName('structurew')[i].innerHTML = gridWidth*66/10;
+ }
+    const gridCount = gridWidth * gridHeight;
+
+    grid = new Array(gridCount).fill(null);
+
+    gridEl.innerHTML = '';
+
+    gridEl.style.display = 'grid';
+    gridEl.style.gridTemplateColumns = `repeat(${gridWidth},1fr)`;
+
+    for(let i = 0; i < gridCount; i++){
+
+        const cell = document.createElement('div');
+
+        cell.className = 'can-cell';
+        cell.dataset.index = i;
+
+        cell.addEventListener('mousedown', () => {
+            isPainting = true;
+            paint(i);
+        });
+
+        cell.addEventListener('mouseover', () => {
+            if(isPainting){
+                paint(i);
+            }
+        });
+
+        gridEl.appendChild(cell);
     }
-  } else if (name === "flag") {
-    // German flag: black top, red middle, gold (Warsteiner/Fanta lemon) bottom
-    for (let r = 0; r < 10; r++) {
-      for (let c = 0; c < 15; c++) {
-        const i = r * 15 + c;
-        if (r < 3)
-          set(i, "redbullwhite"); // black
-        else if (r < 6)
-          set(i, "cokezero"); // red (Diet Coke)
-        else if (r < 9)
-          set(i, "fantalemon"); // gold
-        else set(i, "fantaorange"); // orange bottom border
-      }
+}
+
+fillPalette();
+
+document.addEventListener('mouseup',()=>{
+    isPainting = false;
+});
+
+
+function fillPalette(){
+//   const palette = document.getElementById('palette');
+//   CANS.forEach(can => {
+//   const el = document.createElement('div');
+//   el.className = 'can-option' + (can.id === selectedCan.id ? ' selected' : '');
+//   el.id = 'opt-' + can.id;
+//   el.innesrHTML = `
+//     <div class="can-preview" ">
+//       <img class="canprevimg" src="${can.id}.png" alt="${can.name}">
+//       </div>
+//     <div class="can-label">${can.name}</div>
+//   `;
+//   el.addEventListener('click', () => selectCan(can));
+//   palette.appendChild(el);
+// });
+
+const palette = document.getElementById('palette');
+
+palette.innerHTML = '';
+
+CANS.forEach(can => {
+
+    const el = document.createElement('div');
+
+    el.className =
+        'can-option' +
+        (selectedCan?.id === can.id ? ' selected' : '');
+
+    el.id = 'opt-' + can.id;
+
+    el.innerHTML = `
+        <div class="can-preview">
+            <img
+                class="canprevimg"
+                src="images/${can.id}.png"
+                alt="${can.name}"
+            >
+        </div>
+
+        <div class="can-label">
+            ${can.name}
+        </div>
+    `;
+
+    el.addEventListener('click', () => {
+        selectCan(can);
+    });
+
+    palette.appendChild(el);
+
+});
+}
+// PAINT CELL
+function paint(i){
+
+    const cells = gridEl.querySelectorAll('.can-cell');
+
+    if(isErasing){
+
+        grid[i] = null;
+
+        cells[i].innerHTML = '';
+        cells[i].title='';
+
     }
-  } else if (name === "chaos") {
-    const ids = CANS.map((c) => c.id);
-    // Diet Coke biased random
-    const biasedPool = [
-      ...ids,
-      ...Array(6).fill("diet-coke"),
-      "coke-zero",
-      "monster",
-      "red-bull",
-    ];
-    for (let i = 0; i < 150; i++) {
-      set(i, biasedPool[Math.floor(Math.random() * biasedPool.length)]);
+    else{
+
+        grid[i] = selectedCan.id;
+
+        cells[i].innerHTML='';
+
+        const img = document.createElement('img');
+
+        img.src = `images/${selectedCan.id}.png`;
+        img.alt = selectedCan.name;
+        img.classList.add('can-img');
+
+        cells[i].appendChild(img);
+
+        cells[i].title = selectedCan.name;
     }
-  }
 }
 
 
 
+// SELECT CAN
+function selectCan(can){
+
+    selectedCan = can;
+
+    isErasing = false;
+
+    document
+    .querySelectorAll('.can-option')
+    .forEach(el=>el.classList.remove('selected'));
+
+    document
+    .getElementById('opt-'+can.id)
+    ?.classList.add('selected');
+
+    document
+    .getElementById('eraser-btn')
+    .classList.remove('selected');
+
+    document
+    .getElementById('mode-hint')
+    .textContent=`Mode: Paint · ${can.name}`;
+}
+
+function selectEraser(){
+
+    isErasing=true;
+
+    document
+    .querySelectorAll('.can-option')
+    .forEach(el=>el.classList.remove('selected'));
+
+    document
+    .getElementById('eraser-btn')
+    .classList.add('selected');
+
+    document
+    .getElementById('mode-hint')
+    .textContent='Mode: Erase';
+}
+
+
+
+// FILL GRID
+function fillAll(){
+
+    if(!selectedCan) return;
+
+    for(let i=0;i<grid.length;i++){
+        paint(i);
+    }
+}
+
+
+
+// CLEAR GRID
+function clearAll(){
+
+    const cells = gridEl.querySelectorAll('.can-cell');
+
+    for(let i=0;i<grid.length;i++){
+
+        grid[i]=null;
+
+        cells[i].innerHTML='';
+        cells[i].title='';
+    }
+}
+
+
+
+// PRESETS
+function loadPreset(name){
+
+    clearAll();
+
+    function set(i,canId){
+
+        const can = CANS.find(c=>c.id===canId);
+
+        if(!can) return;
+
+        const oldCan = selectedCan;
+
+        selectedCan=can;
+
+        paint(i);
+
+        selectedCan=oldCan;
+    }
+
+
+    if(name==="diagonal"){
+
+        for(let r=0;r<gridHeight;r++){
+
+            for(let c=0;c<gridWidth;c++){
+
+                let i=(r*gridWidth)+c;
+
+                let d=(r+c)%7;
+
+                if(d<3)
+                    set(i,"cokezero");
+
+                else if(d<5)
+                    set(i,"spriteclassic");
+
+                else
+                    set(i,"monster");
+            }
+        }
+    }
+
+
+
+    else if(name==="flag"){
+
+        let third=gridHeight/3;
+
+        for(let r=0;r<gridHeight;r++){
+
+            for(let c=0;c<gridWidth;c++){
+
+                let i=(r*gridWidth)+c;
+
+                if(r<third)
+                    set(i,"monster");
+
+                else if(r<(third*2))
+                    set(i,"cokezero");
+
+                else
+                    set(i,"fantalemon");
+
+            }
+        }
+    }
+
+
+
+    else if(name==="chaos"){
+
+        const ids=CANS.map(c=>c.id);
+
+        for(let i=0;i<grid.length;i++){
+
+            set(
+                i,
+                ids[Math.floor(Math.random()*ids.length)]
+            );
+
+        }
+    }
+}
