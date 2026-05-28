@@ -323,7 +323,7 @@ function refreshCounts() {
       card.className = "count-card";
       card.innerHTML = `
         <div class="count-thumb">
-          <img src="imaegs/${id}.png" alt="${can.name}">
+          <img src="images/${id}.png" alt="${can.name}">
         </div>
         <div class="count-info">
           <strong>${n}</strong>
