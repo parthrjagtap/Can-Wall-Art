@@ -1,93 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Can Wall Art Designer</title>
-<link rel="stylesheet" href="styles.css">
-<script src="scripts.js" defer></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
-</style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Can Wall Art Designer</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="scripts.js" defer></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+    </style>
+  </head>
+  <body>
+    <h1>CAN WALL ART</h1>
+    <div class="subtitle">
+      <span class="cols"> </span> × <span class="rows"> </span> Grid · Click to
+      paint
+    </div>
+    <div class="inputs" id="input">
+      Enter the number of cans across(width) and down(height)
+      <br />
+      <label for="width">Width</label> <br />
+      <input type="number" name="width" id="width" />
+      <br />
+      <label for="height">Height</label> <br />
+      <input type="number" name="height" id="height" />
+      <br />
+      <button type="submit" onclick="gridConst()">Build!</button>
+    </div>
+    <div class="layout" style="display: none" id="layout">
+      <div class="sidebar">
+        <h2>Select Can</h2>
+        <div id="palette"></div>
+        <div
+          style="
+            margin-top: 16px;
+            border-top: 1px solid #222;
+            padding-top: 14px;
+          "
+        >
+          <h2 style="margin-bottom: 10px">Tools</h2>
+          <div class="can-option" id="eraser-btn" onclick="selectEraser()">
+            <div
+              class="can-preview"
+              style="background: #1a1a1a; border: 1px dashed #444"
+            ></div>
+            <div class="can-label">Erase</div>
+          </div>
+        </div>
+      </div>
 
-<h1>CAN WALL ART</h1>
-<div class="subtitle"><span class ="cols"> </span> × <span class ="rows"> </span> Grid · Click to paint</div>
-<div class="inputs" id="input" >
+      <!-- Main grid -->
+      <div class="grid-wrapper">
+        <div class="grid-meta">
+          <span class="cols"> </span> cols × <span class="rows"> </span> rows
+          &nbsp;|&nbsp; ~<span class="structurew"></span>cm wide ×
+          <span class="structureh"></span>cm tall &nbsp;|&nbsp;
+          <span class="canCount"></span> cans total
+        </div>
+        <div class="can-grid" id="grid"></div>
 
-  Enter the number of cans across(width) and down(height)
-  <br>
-  <label for="width">Width</label> <br>
-  <input type="number" name="width" id="width">
-  <br>
-  <label for="height">Height</label> <br>
-  <input type="number" name="height" id="height">
-<br>
-<button type="submit" onclick="gridConst()">Build!</button>
-</div>
-<div class="layout" style="display:none;" id="layout">
- 
-  <div class="sidebar">
-    <h2>Select Can</h2>
-    <div id="palette"></div>
-    <div style="margin-top:16px; border-top:1px solid #222; padding-top:14px;">
-      <h2 style="margin-bottom:10px;">Tools</h2>
-      <div class="can-option" id="eraser-btn" onclick="selectEraser()">
-        <div class="can-preview" style="background:#1a1a1a; border:1px dashed #444;"></div>
-        <div class="can-label">Erase</div>
+        <div class="info-strip">
+          <div class="info-box">Total cans<span class="canCount"></span></div>
+          <div class="info-box">
+            Wall width<span class="structurew"></span>cm
+          </div>
+          <div class="info-box">
+            Wall height<span class="structureh"></span>cm
+          </div>
+          <div class="info-box">Can size (EU)<span>66 × 120 mm</span></div>
+        </div>
+
+        <div class="controls">
+          <button onclick="fillAll()">Fill All → Selected</button>
+          <button onclick="clearAll()">Clear All</button>
+          <button onclick="loadPreset('diagonal')">Preset: Diagonal</button>
+          <button onclick="loadPreset('flag')">Preset: DE Flag</button>
+          <button onclick="loadPreset('chaos')">Preset: Random</button>
+        </div>
+
+        <div class="matrix-section" id="matrix-section" style="display: none">
+          <div class="matrix-header">
+            <div>
+              <div class="matrix-title">
+                Build Matrix <em>- updates live as you paint</em>
+              </div>
+            </div>
+          </div>
+          <div class="matrix-wrap">
+            <table id="matrix-table"></table>
+          </div>
+          <div id="screen-legend" style="display: none; margin-top: 14px"></div>
+        </div>
+
+        <div class="counts-section" id="counts-section" style="display: none">
+          <div class="counts-title">Shopping List</div>
+          <div class="counts-grid" id="counts-grid"></div>
+        </div>
+
+        <div class="print-bar" id="print-bar" style="display: none">
+          <button class="primary" onclick="doPrint()">
+            🖨 Print Canvas + Matrix + Shopping List
+          </button>
+          <span style="font-size: 0.6rem; color: #444; letter-spacing: 0.08em"
+            >CANVAS ON PAGE 1 &nbsp;·&nbsp; MATRIX + SHOPPING LIST ON PAGE
+            2</span
+          >
+        </div>
+
+        <div class="legend" id="legend"></div>
+        <div class="mode-hint" id="mode-hint">
+          Mode: Paint · Click or drag to paint
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- Main grid -->
-  <div class="grid-wrapper">
-    <div class="grid-meta">
-      <span class ="cols"> </span> cols × <span class ="rows"> </span> rows &nbsp;|&nbsp; ~<span class ="structurew" ></span>cm wide × <span class ="structureh"></span>cm tall &nbsp;|&nbsp; <span class="canCount"></span> cans total
-    </div>
-    <div class="can-grid" id="grid"></div>
-
-    <div class="info-strip">
-      <div class="info-box">Total cans<span class="canCount"></span></div>
-      <div class="info-box">Wall width<span class ="structurew" ></span>cm</div>
-      <div class="info-box">Wall height<span class ="structureh"></span>cm</div>
-      <div class="info-box">Can size (EU)<span>66 × 120 mm</span></div>
-    </div>
-
-    <div class="controls">
-      <button onclick="fillAll()">Fill All → Selected</button>
-      <button onclick="clearAll()">Clear All</button>
-      <button onclick="loadPreset('diagonal')">Preset: Diagonal</button>
-      <button onclick="loadPreset('flag')">Preset: DE Flag</button>
-      <button onclick="loadPreset('chaos')">Preset: Random</button>
-    </div>
-
-    <div class="matrix-section" id="matrix-section" style="display:none;">
-  <div class="matrix-header">
-    <div>
-      <div class="matrix-title">Build Matrix <em>— updates live as you paint</em></div>
-    </div>
-  </div>
-  <div class="matrix-wrap">
-    <table id="matrix-table"></table>
-  </div>
-</div>
-
-<div class="counts-section" id="counts-section" style="display:none;">
-  <div class="counts-title">Shopping List</div>
-  <div class="counts-grid" id="counts-grid"></div>
-</div>
-
-<!-- PRINT BAR -->
-<div class="print-bar" id="print-bar" style="display:none;">
-  <button class="primary" onclick="window.print()">🖨 Print Matrix + Shopping List</button>
-  
-</div>
-
-    <div class="legend" id="legend"></div>
-    <div class="mode-hint" id="mode-hint">Mode: Paint · Click or drag to paint</div>
-  </div>
-</div>
-
-</body>
+  </body>
 </html>

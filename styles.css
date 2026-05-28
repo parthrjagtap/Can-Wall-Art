@@ -1,400 +1,650 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #0a0a0a;
+  color: #f0f0f0;
+  font-family: "DM Mono", monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 60px;
+}
+
+h1 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: clamp(2rem, 6vw, 4rem);
+  letter-spacing: 0.08em;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  color: #555;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+
+/* Input section */
+.inputs {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 0.75rem;
+  color: #888;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  max-width: 340px;
+  width: 100%;
+}
+
+.inputs label {
+  color: #555;
+  font-size: 0.65rem;
+}
+
+.inputs input[type="number"] {
+  background: #0a0a0a;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #fff;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.1em;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+
+.inputs input[type="number"]:focus {
+  border-color: #666;
+}
+
+.layout {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  max-width: 1200px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* palette part */
+.sidebar {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 12px;
+  padding: 18px;
+  width: 200px;
+  flex-shrink: 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 16px;
+}
+
+.sidebar h2 {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: #888;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+
+.can-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 3px;
+  transition: background 0.15s;
+  border: 2px solid transparent;
+  user-select: none;
+}
+
+.can-option:hover {
+  background: #1a1a1a;
+}
+.can-option.selected {
+  border-color: #fff;
+  background: #1a1a1a;
+}
+
+.can-preview {
+  width: 22px;
+  height: 38px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.canprevimg {
+  width: 22px;
+  height: 38px;
+  object-fit: cover;
+}
+
+.can-label {
+  font-size: 0.58rem;
+  line-height: 1.3;
+  color: #ccc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Actial paint grid */
+.grid-wrapper {
+  flex: 1;
+  min-width: 280px;
+}
+
+.grid-meta {
+  font-size: 0.65rem;
+  color: #444;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.can-grid {
+  display: grid;
+  gap: 2px;
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.can-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.can-cell {
+  aspect-ratio: 66 / 120;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.1s,
+    filter 0.1s;
+  background: #1a1a1a;
+  border: 1px solid #222;
+}
+
+.can-cell:hover {
+  transform: scaleY(1.04);
+  filter: brightness(1.25);
+  z-index: 2;
+}
+
+.can-cell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 28%;
+  width: 12%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+  z-index: 1;
+}
 
 
+.info-strip {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+.info-box {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.65rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.info-box span {
+  display: block;
+  font-size: 1rem;
+  color: #ddd;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+/*control panel*/
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+button {
+  font-family: "DM Mono", monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1a1a;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+button:hover {
+  background: #2a2a2a;
+  color: #fff;
+  border-color: #555;
+}
+button.primary {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+button.primary:hover {
+  background: #ddd;
+}
+
+.mode-hint {
+  font-size: 0.6rem;
+  color: #444;
+  margin-top: 8px;
+  letter-spacing: 0.08em;
+}
+
+/*Matrix section*/
+.matrix-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 32px;
+}
+
+.matrix-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.matrix-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.12em;
+  color: #444;
+}
+
+.matrix-title em {
+  color: #888;
+  font-style: normal;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.matrix-wrap {
+  overflow-x: auto;
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 400px;
+}
+
+thead th {
+  background: #0a0a0a;
+  color: #333;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 5px 4px;
+  text-align: center;
+  border: 1px solid #1a1a1a;
+  white-space: nowrap;
+}
+
+tbody td {
+  padding: 4px 3px;
+  text-align: center;
+  border: 1px solid #1a1a1a;
+  font-size: 0.5rem;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  min-width: 52px;
+  transition: background 0.1s;
+}
+
+tbody td.row-lbl {
+  background: #0a0a0a !important;
+  color: #333 !important;
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  min-width: 28px !important;
+}
+
+tbody td.empty-cell {
+  background: #0f0f0f;
+  color: #2a2a2a;
+}
+
+/*Shopping list*/
+.counts-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 24px;
+}
+
+.counts-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.12em;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+.counts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.count-card {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 160px;
+}
+
+.count-thumb {
+  width: 20px;
+  height: 34px;
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.count-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.count-info {
+  font-size: 0.6rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.count-info strong {
+  display: block;
+  font-size: 1.6rem;
+  color: #ddd;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+/*Print section*/
+.print-bar {
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 28px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/*legend for abbreviations of the brands*/
+#screen-legend {
+  background: #111;
+  border: 1px solid #1e1e1e;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.leg-title {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: #333;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.leg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 5px 16px;
+}
+
+.leg-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.6rem;
+}
+
+.leg-abv {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  min-width: 26px;
+  text-align: center;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.leg-name {
+  color: #666;
+  letter-spacing: 0.04em;
+}
+
+/*Printing section*/
+@media print {
+  @page {
+    margin: 8mm;
+    size: A4 landscape;
+  }
 
   body {
-    background: #0a0a0a;
-    color: #f0f0f0;
-    font-family: 'DM Mono', monospace;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 16px 60px;
+    background: white !important;
+    color: black !important;
+    padding: 0 !important;
+    display: block !important;
   }
-
   h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2rem, 6vw, 4rem);
-    letter-spacing: 0.08em;
-    color: #fff;
-    margin-bottom: 4px;
+    color: black !important;
+    font-size: 1.4rem !important;
   }
-
   .subtitle {
-    font-size: 0.7rem;
-    color: #555;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 28px;
+    color: #555 !important;
+    margin-bottom: 6px !important;
   }
 
-  /* ── INPUT SCREEN ── */
-  .inputs {
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 12px;
-    padding: 28px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    font-size: 0.75rem;
-    color: #888;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    max-width: 340px;
-    width: 100%;
+  .inputs,
+  .sidebar,
+  .controls,
+  .mode-hint,
+  .info-strip,
+  .print-bar {
+    display: none !important;
   }
-
-  .inputs label { color: #555; font-size: 0.65rem; }
-
-  .inputs input[type=number] {
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 6px;
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.1em;
-    padding: 8px 12px;
-    width: 100%;
-    outline: none;
-  }
-
-  .inputs input[type=number]:focus { border-color: #666; }
 
   .layout {
-    display: flex;
-    gap: 28px;
-    width: 100%;
-    max-width: 1200px;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
-
-  /* ── SIDEBAR ── */
-  .sidebar {
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 12px;
-    padding: 18px;
-    width: 200px;
-    flex-shrink: 0;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: sticky;
-    top: 16px;
+  .grid-wrapper {
+    width: 100% !important;
+    min-width: unset !important;
   }
-
-  .sidebar h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.1em;
-    color: #888;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-  }
-
-  .can-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 7px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 3px;
-    transition: background 0.15s;
-    border: 2px solid transparent;
-    user-select: none;
-  }
-
-  .can-option:hover { background: #1a1a1a; }
-  .can-option.selected { border-color: #fff; background: #1a1a1a; }
-
-  .can-preview {
-    width: 22px;
-    height: 38px;
-    border-radius: 4px;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .canprevimg { width: 22px; height: 38px; object-fit: cover; }
-
-  .can-label {
-    font-size: 0.58rem;
-    line-height: 1.3;
-    color: #ccc;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  /* ── MAIN GRID AREA ── */
-  .grid-wrapper { flex: 1; min-width: 280px; }
-
   .grid-meta {
-    font-size: 0.65rem;
-    color: #444;
-    letter-spacing: 0.1em;
-    margin-bottom: 12px;
-    text-transform: uppercase;
+    color: #555 !important;
+    margin-bottom: 4px !important;
   }
 
   .can-grid {
-    display: grid;
-    gap: 2px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 10px;
-    padding: 10px;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #f5f5f5 !important;
+    border: 1px solid #ccc !important;
+    padding: 3px !important;
+    gap: 1px !important;
+    page-break-after: always;
+    break-after: page;
   }
-
-  .can-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
   .can-cell {
-    aspect-ratio: 66 / 120;
-    border-radius: 3px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.1s, filter 0.1s;
-    background: #1a1a1a;
-    border: 1px solid #222;
+    border: 1px solid #ddd !important;
+    border-radius: 1px !important;
+  }
+  .can-cell img {
+    display: block !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
-  .can-cell:hover {
-    transform: scaleY(1.04);
-    filter: brightness(1.25);
-    z-index: 2;
-  }
-
-  .can-cell::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 28%; width: 12%; height: 100%;
-    background: rgba(255,255,255,0.12);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  /* ── INFO STRIP ── */
-  .info-strip {
-    display: flex;
-    gap: 14px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-
-  .info-box {
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-size: 0.65rem;
-    color: #555;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .info-box span {
-    display: block;
-    font-size: 1rem;
-    color: #ddd;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 0.1em;
-    margin-top: 2px;
-  }
-
-  /* ── CONTROLS ── */
-  .controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 14px;
-    flex-wrap: wrap;
-  }
-
-  button {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 8px 16px;
-    border-radius: 6px;
-    border: 1px solid #333;
-    background: #1a1a1a;
-    color: #aaa;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
-  button:hover { background: #2a2a2a; color: #fff; border-color: #555; }
-  button.primary { background: #fff; color: #000; border-color: #fff; }
-  button.primary:hover { background: #ddd; }
-
-  .mode-hint {
-    font-size: 0.6rem;
-    color: #444;
-    margin-top: 8px;
-    letter-spacing: 0.08em;
-  }
-
-  /* ── MATRIX SECTION ── */
+  
   .matrix-section {
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 32px;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 6px !important;
   }
-
   .matrix-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 4px !important;
   }
-
   .matrix-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 0.12em;
-    color: #444;
-  }
-
-  .matrix-title em { color: #888; font-style: normal; font-size: 0.7rem; letter-spacing: 0.1em; }
-
-  .matrix-wrap {
-    overflow-x: auto;
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 12px;
-    padding: 14px;
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 400px;
-  }
-
-  thead th {
-    background: #0a0a0a;
-    color: #333;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    padding: 5px 4px;
-    text-align: center;
-    border: 1px solid #1a1a1a;
-    white-space: nowrap;
-  }
-
-  tbody td {
-    padding: 4px 3px;
-    text-align: center;
-    border: 1px solid #1a1a1a;
-    font-size: 0.5rem;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-    min-width: 52px;
-    transition: background 0.1s;
-  }
-
-  tbody td.row-lbl {
-    background: #0a0a0a !important;
     color: #333 !important;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    min-width: 28px !important;
+    font-size: 1rem !important;
+  }
+  .matrix-title em {
+    display: none;
+  }
+  .matrix-wrap {
+    display: none !important;
   }
 
-  tbody td.empty-cell {
-    background: #0f0f0f;
-    color: #2a2a2a;
+  .print-chunk {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 5mm;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
-
-  /* ── COUNTS ── */
-  .counts-section {
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 24px;
+  .print-chunk table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    table-layout: fixed !important;
   }
-
-  .counts-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.12em;
-    color: #444;
-    margin-bottom: 12px;
-  }
-
-  .counts-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .count-card {
-    background: #111;
-    border: 1px solid #1e1e1e;
-    border-radius: 10px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 160px;
-  }
-
-  .count-thumb {
-    width: 20px;
-    height: 34px;
-    border-radius: 3px;
+  .print-chunk th {
+    background: #eee !important;
+    color: #333 !important;
+    font-family: monospace;
+    font-size: 6pt !important;
+    padding: 2pt 1pt !important;
+    border: 0.5pt solid #bbb !important;
+    text-align: center;
     overflow: hidden;
-    flex-shrink: 0;
+    white-space: nowrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-chunk td {
+    font-family: monospace;
+    font-size: 5.5pt !important;
+    padding: 2pt 1pt !important;
+    border: 0.5pt solid #ccc !important;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-chunk td.row-lbl {
+    background: #eee !important;
+    color: #555 !important;
+    font-weight: bold;
+    width: 16pt;
+  }
+  .print-chunk td.empty-cell {
+    background: #f9f9f9 !important;
+    color: #ccc !important;
+  }
+  .chunk-label {
+    font-family: monospace;
+    font-size: 7pt;
+    color: #888;
+    display: block !important;
+    margin-bottom: 2pt;
   }
 
-  .count-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
-  .count-info { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 0.07em; }
+  .counts-section {
+    display: block !important;
+    margin-top: 8mm !important;
+  }
+  .counts-title {
+    color: #333 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 6px !important;
+  }
+  .counts-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+  }
+  .count-card {
+    background: white !important;
+    border: 1px solid #ccc !important;
+    padding: 4px 8px !important;
+    page-break-inside: avoid;
+  }
+  .count-info {
+    color: #333 !important;
+  }
   .count-info strong {
-    display: block;
-    font-size: 1.6rem;
-    color: #ddd;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 0.06em;
-    line-height: 1;
+    color: #000 !important;
+    font-size: 0.9rem !important;
   }
-
-  /* ── PRINT ── */
-  .print-bar {
-    width: 100%;
-    max-width: 1200px;
-    margin-top: 28px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
+  .count-thumb img {
+    display: block !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
-
-  /* ── PRINT STYLES ── */
-  @media print {
-    body { background: white; color: black; padding: 8px; }
-    h1 { color: black; }
-    .subtitle, .inputs, .sidebar, .controls, .mode-hint,
-    .info-strip, .print-bar, .can-grid, .grid-wrapper { display: none !important; }
-    .layout { display: none !important; }
-    .matrix-section, .counts-section { display: block !important; margin-top: 8px; }
-    .matrix-wrap { background: white; border: 1px solid #ccc; padding: 8px; }
-    thead th { background: #eee; color: #333; font-size: 0.7rem; }
-    tbody td { font-size: 0.42rem; padding: 2px 2px; min-width: 36px; }
-    tbody td.empty-cell { background: #f8f8f8 !important; color: #ccc !important; }
-    tbody td.row-lbl { background: #eee !important; color: #555 !important; }
-    .count-card { background: white; border: 1px solid #ccc; }
-    .count-info { color: #333; }
-    .count-info strong { color: #000; }
-    .matrix-title { color: #333; }
-    .counts-title { color: #333; }
-  }
+}
