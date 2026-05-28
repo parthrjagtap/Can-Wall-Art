@@ -1,286 +1,307 @@
 const CANS = [
-  { id: "monster", name: "Monster" },
-  { id: "mezzomix", name: "Mezzo Mix" },
-  { id: "redbullberry", name: "Red Bull Berry" },
-  { id: "redbullgreen", name: "Red Bull Green" },
-  { id: "redbulldarkblue", name: "Red Bull Dark Blue" },
-  { id: "redbullclassic", name: "Red Bull Classic" },
-  { id: "redbullapple2", name: "Red Bull Apple" },
-  { id: "redbullpink", name: "Red Bull Pink" },
-  { id: "monsterwhite", name: "Monster White" },
-  { id: "cokezero", name: "Coca-Cola Zero" },
-  { id: "pepsiclassic", name: "Pepsi Classic" },
-  { id: "cokeclassic", name: "Coca-Cola Classic" },
-  { id: "fantaorange", name: "Fanta Orange" },
-  { id: "fantalemon", name: "Fanta Lemon" },
+  { id: "monster",             name: "Monster" },
+  { id: "mezzomix",            name: "Mezzo Mix" },
+  { id: "redbullberry",        name: "Red Bull Berry" },
+  { id: "redbullgreen",        name: "Red Bull Green" },
+  { id: "redbulldarkblue",     name: "Red Bull Dark Blue" },
+  { id: "redbullclassic",      name: "Red Bull Classic" },
+  { id: "redbullapple2",       name: "Red Bull Apple" },
+  { id: "redbullpink",         name: "Red Bull Pink" },
+  { id: "monsterwhite",        name: "Monster White" },
+  { id: "cokezero",            name: "Coca-Cola Zero" },
+  { id: "pepsiclassic",        name: "Pepsi Classic" },
+  { id: "cokeclassic",         name: "Coca-Cola Classic" },
+  { id: "fantaorange",         name: "Fanta Orange" },
+  { id: "fantalemon",          name: "Fanta Lemon" },
   { id: "pepsistraberrycream", name: "Pepsi Strawberry Cream" },
-  { id: "pepsilemonlime", name: "Pepsi Lemon Lime" },
-  { id: "spriteclassic", name: "Sprite Classic" },
-  { id: "redbullwhite", name: "Red Bull White" },
+  { id: "pepsilemonlime",      name: "Pepsi Lemon Lime" },
+  { id: "spriteclassic",       name: "Sprite Classic" },
+  { id: "redbullwhite",        name: "Red Bull White" },
 ];
 
-// function paint(i) {
-//   const cells = gridEl.querySelectorAll(".can-cell");
-//   if (isErasing) {
-//     grid[i] = null;
-//     cells[i].style.background = "#1a1a1a";
-//     cells[i].title = "";
-//   } else {
-//     grid[i] = selectedCan.id;
-//     cells[i].style.background = `url(images/'${grid[i]}.png')`;
-//     cells[i].style.backgroundSize = "cover";
-//     cells[i].title = selectedCan.name;
-//   }
-// }
 
-let gridWidth = 0;
+const CAN_BY_ID = {};
+CANS.forEach(c => { CAN_BY_ID[c.id] = c; });
+
+
+let gridWidth  = 0;
 let gridHeight = 0;
-
-let grid = [];
+let grid       = [];        
 let selectedCan = null;
+let isPainting  = false;
+let isErasing   = false;
 
-let isPainting = false;
-let isErasing = false;
+const gridEl = document.getElementById('grid');
 
-const gridEl = document.getElementById("grid");
-
-// let selectedCan = CANS[0];
-// let isErasing = false;
-// let isPainting = false;
-// let grid = Array(150).fill(null); // null = empty
-
-// Build palette
-
-// BUILD GRID
-function gridConst() {
-  document.getElementById("input").style.display = "none";
-  document.getElementById("layout").style.display = "flex";
-
-  gridWidth = parseInt(document.getElementById("width").value);
-  gridHeight = parseInt(document.getElementById("height").value);
-
-  // cols.innerHTML = gridWidth;
-  // rows.innerHTML = gridHeight;
-  for (let i = 0; i < 2; i++) {
-    document.getElementsByClassName("canCount")[i].innerHTML =
-      gridWidth * gridHeight;
-    document.getElementsByClassName("cols")[i].innerHTML = gridWidth;
-    document.getElementsByClassName("rows")[i].innerHTML = gridHeight;
-    document.getElementsByClassName("structureh")[i].innerHTML =
-      (gridHeight * 120) / 10;
-
-    document.getElementsByClassName("structurew")[i].innerHTML =
-      (gridWidth * 66) / 10;
-  }
-  const gridCount = gridWidth * gridHeight;
-
-  grid = new Array(gridCount).fill(null);
-
-  gridEl.innerHTML = "";
-
-  gridEl.style.display = "grid";
-  gridEl.style.gridTemplateColumns = `repeat(${gridWidth},1fr)`;
-
-  for (let i = 0; i < gridCount; i++) {
-    const cell = document.createElement("div");
-
-    cell.className = "can-cell";
-    cell.dataset.index = i;
-
-    cell.addEventListener("mousedown", () => {
-      isPainting = true;
-      paint(i);
-    });
-
-    cell.addEventListener("mouseover", () => {
-      if (isPainting) {
-        paint(i);
-      }
-    });
-
-    gridEl.appendChild(cell);
-  }
-}
-
-fillPalette();
-
-document.addEventListener("mouseup", () => {
-  isPainting = false;
-});
 
 function fillPalette() {
-  //   const palette = document.getElementById('palette');
-  //   CANS.forEach(can => {
-  //   const el = document.createElement('div');
-  //   el.className = 'can-option' + (can.id === selectedCan.id ? ' selected' : '');
-  //   el.id = 'opt-' + can.id;
-  //   el.innesrHTML = `
-  //     <div class="can-preview" ">
-  //       <img class="canprevimg" src="${can.id}.png" alt="${can.name}">
-  //       </div>
-  //     <div class="can-label">${can.name}</div>
-  //   `;
-  //   el.addEventListener('click', () => selectCan(can));
-  //   palette.appendChild(el);
-  // });
-
-  const palette = document.getElementById("palette");
-
-  palette.innerHTML = "";
-
-  CANS.forEach((can) => {
-    const el = document.createElement("div");
-
-    el.className =
-      "can-option" + (selectedCan?.id === can.id ? " selected" : "");
-
-    el.id = "opt-" + can.id;
-
+  const palette = document.getElementById('palette');
+  palette.innerHTML = '';
+  CANS.forEach(can => {
+    const el = document.createElement('div');
+    el.className = 'can-option' + (selectedCan?.id === can.id ? ' selected' : '');
+    el.id = 'opt-' + can.id;
     el.innerHTML = `
-        <div class="can-preview">
-            <img
-                class="canprevimg"
-                src="images/${can.id}.png"
-                alt="${can.name}"
-            >
-        </div>
-
-        <div class="can-label">
-            ${can.name}
-        </div>
+      <div class="can-preview">
+        <img class="canprevimg" src="images/${can.id}.png" alt="${can.name}">
+      </div>
+      <div class="can-label">${can.name}</div>
     `;
-
-    el.addEventListener("click", () => {
-      selectCan(can);
-    });
-
+    el.addEventListener('click', () => selectCan(can));
     palette.appendChild(el);
   });
 }
-// PAINT CELL
+
+
+function gridConst() {
+  document.getElementById('input').style.display  = 'none';
+  document.getElementById('layout').style.display = 'flex';
+  document.getElementById('matrix-section').style.display = 'block';
+  document.getElementById('counts-section').style.display = 'block';
+  document.getElementById('print-bar').style.display      = 'flex';
+
+  gridWidth  = parseInt(document.getElementById('width').value)  || 15;
+  gridHeight = parseInt(document.getElementById('height').value) || 10;
+
+  document.querySelectorAll('.cols').forEach(el   => el.textContent = gridWidth);
+  document.querySelectorAll('.rows').forEach(el   => el.textContent.textContent = gridHeight);
+  document.querySelectorAll('.canCount').forEach(el   => el.textContent = gridWidth * gridHeight);
+  document.querySelectorAll('.structurew').forEach(el => el.textContent = gridWidth  * 66);
+  document.querySelectorAll('.structureh').forEach(el => el.textContent = gridHeight * 120);
+
+  const gridCount = gridWidth * gridHeight;
+  grid = new Array(gridCount).fill(null);
+
+  gridEl.innerHTML = '';
+  gridEl.style.gridTemplateColumns = `repeat(${gridWidth}, 1fr)`;
+
+  for (let i = 0; i < gridCount; i++) {
+    const cell = document.createElement('div');
+    cell.className    = 'can-cell';
+    cell.dataset.index = i;
+    cell.addEventListener('mousedown', () => { isPainting = true; paint(i); });
+    cell.addEventListener('mouseover', () => { if (isPainting) paint(i); });
+    gridEl.appendChild(cell);
+  }
+
+  // init matrix
+  buildMatrixShell();
+  refreshMatrix();
+  refreshCounts();
+}
+
+document.addEventListener('mouseup', () => { isPainting = false; });
+
+
 function paint(i) {
-  const cells = gridEl.querySelectorAll(".can-cell");
+  const cells = gridEl.querySelectorAll('.can-cell');
 
   if (isErasing) {
     grid[i] = null;
-
-    cells[i].innerHTML = "";
-    cells[i].title = "";
+    cells[i].innerHTML = '';
+    cells[i].title = '';
   } else {
+    if (!selectedCan) return;
     grid[i] = selectedCan.id;
-
-    cells[i].innerHTML = "";
-
-    const img = document.createElement("img");
-
+    cells[i].innerHTML = '';
+    const img = document.createElement('img');
     img.src = `images/${selectedCan.id}.png`;
     img.alt = selectedCan.name;
-    img.classList.add("can-img");
-
+    img.classList.add('can-img');
     cells[i].appendChild(img);
-
     cells[i].title = selectedCan.name;
   }
+
+  updateMatrixCell(i);
+  refreshCounts();
 }
 
-// SELECT CAN
 function selectCan(can) {
   selectedCan = can;
-
-  isErasing = false;
-
-  document
-    .querySelectorAll(".can-option")
-    .forEach((el) => el.classList.remove("selected"));
-
-  document.getElementById("opt-" + can.id)?.classList.add("selected");
-
-  document.getElementById("eraser-btn").classList.remove("selected");
-
-  document.getElementById("mode-hint").textContent =
-    `Mode: Paint · ${can.name}`;
+  isErasing   = false;
+  document.querySelectorAll('.can-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('opt-' + can.id)?.classList.add('selected');
+  document.getElementById('eraser-btn').classList.remove('selected');
+  document.getElementById('mode-hint').textContent = `Mode: Paint · ${can.name}`;
 }
 
 function selectEraser() {
   isErasing = true;
-
-  document
-    .querySelectorAll(".can-option")
-    .forEach((el) => el.classList.remove("selected"));
-
-  document.getElementById("eraser-btn").classList.add("selected");
-
-  document.getElementById("mode-hint").textContent = "Mode: Erase";
+  document.querySelectorAll('.can-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('eraser-btn').classList.add('selected');
+  document.getElementById('mode-hint').textContent = 'Mode: Erase';
 }
 
-// FILL GRID
+
 function fillAll() {
   if (!selectedCan) return;
-
-  for (let i = 0; i < grid.length; i++) {
-    paint(i);
-  }
+  for (let i = 0; i < grid.length; i++) paint(i);
 }
 
-// CLEAR GRID
 function clearAll() {
-  const cells = gridEl.querySelectorAll(".can-cell");
-
+  const cells = gridEl.querySelectorAll('.can-cell');
   for (let i = 0; i < grid.length; i++) {
     grid[i] = null;
-
-    cells[i].innerHTML = "";
-    cells[i].title = "";
+    cells[i].innerHTML = '';
+    cells[i].title = '';
   }
+  refreshMatrix();
+  refreshCounts();
 }
 
-// PRESETS
+
 function loadPreset(name) {
   clearAll();
 
   function set(i, canId) {
-    const can = CANS.find((c) => c.id === canId);
-
+    const can = CAN_BY_ID[canId];
     if (!can) return;
-
     const oldCan = selectedCan;
-
     selectedCan = can;
-
     paint(i);
-
     selectedCan = oldCan;
   }
 
-  if (name === "diagonal") {
+  if (name === 'diagonal') {
     for (let r = 0; r < gridHeight; r++) {
       for (let c = 0; c < gridWidth; c++) {
-        let i = r * gridWidth + c;
-
-        let d = (r + c) % 7;
-
-        if (d < 3) set(i, "cokezero");
-        else if (d < 5) set(i, "spriteclassic");
-        else set(i, "monster");
+        const i = r * gridWidth + c;
+        const d = (r + c) % 7;
+        if (d < 3)      set(i, 'cokezero');
+        else if (d < 5) set(i, 'spriteclassic');
+        else            set(i, 'monster');
       }
     }
-  } else if (name === "flag") {
-    let third = gridHeight / 3;
-
+  } else if (name === 'flag') {
+    const third = gridHeight / 3;
     for (let r = 0; r < gridHeight; r++) {
       for (let c = 0; c < gridWidth; c++) {
-        let i = r * gridWidth + c;
-
-        if (r < third) set(i, "monster");
-        else if (r < third * 2) set(i, "cokezero");
-        else set(i, "fantalemon");
+        const i = r * gridWidth + c;
+        if (r < third)        set(i, 'monster');
+        else if (r < third*2) set(i, 'cokezero');
+        else                  set(i, 'fantalemon');
       }
     }
-  } else if (name === "chaos") {
-    const ids = CANS.map((c) => c.id);
-
+  } else if (name === 'chaos') {
+    const ids = CANS.map(c => c.id);
     for (let i = 0; i < grid.length; i++) {
       set(i, ids[Math.floor(Math.random() * ids.length)]);
     }
   }
 }
+
+
+function buildMatrixShell() {
+  const table = document.getElementById('matrix-table');
+  table.innerHTML = '';
+
+  const thead = table.createTHead();
+  const hr    = thead.insertRow();
+  const th0   = document.createElement('th');
+  th0.textContent = '#';
+  hr.appendChild(th0);
+  for (let c = 1; c <= gridWidth; c++) {
+    const th = document.createElement('th');
+    th.textContent = `C${c}`;
+    hr.appendChild(th);
+  }
+
+  const tbody = table.createTBody();
+  for (let r = 0; r < gridHeight; r++) {
+    const tr = tbody.insertRow();
+    tr.id = `mrow-${r}`;
+
+    const lbl = document.createElement('td');
+    lbl.className   = 'row-lbl';
+    lbl.textContent = `R${r + 1}`;
+    tr.appendChild(lbl);
+
+    for (let c = 0; c < gridWidth; c++) {
+      const td  = document.createElement('td');
+      td.id     = `mcell-${r}-${c}`;
+      td.className = 'empty-cell';
+      td.textContent = '—';
+      tr.appendChild(td);
+    }
+  }
+}
+
+function updateMatrixCell(i) {
+  const r   = Math.floor(i / gridWidth);
+  const c   = i % gridWidth;
+  const td  = document.getElementById(`mcell-${r}-${c}`);
+  if (!td) return;
+
+  const canId = grid[i];
+  if (!canId) {
+    td.textContent      = '—';
+    td.className        = 'empty-cell';
+    td.style.background = '';
+    td.style.color      = '';
+  } else {
+    const can           = CAN_BY_ID[canId];
+    td.textContent      = can.name;
+    td.className        = '';
+    const color = cellColor(canId);
+    td.style.background = color.bg;
+    td.style.color      = color.fg;
+  }
+}
+
+
+function refreshMatrix() {
+  for (let i = 0; i < grid.length; i++) {
+    updateMatrixCell(i);
+  }
+}
+
+
+function cellColor(id) {
+  if (id.startsWith('coke') || id === 'cokeclassic')   return { bg: '#2a0005', fg: '#ff9999' };
+  if (id.startsWith('pepsi'))                           return { bg: '#001030', fg: '#88aaff' };
+  if (id.startsWith('fanta'))                           return { bg: '#251000', fg: '#ffbb55' };
+  if (id === 'spriteclassic')                           return { bg: '#002200', fg: '#66ee44' };
+  if (id === 'monster')                                 return { bg: '#060606', fg: '#44ee55' };
+  if (id === 'monsterwhite')                            return { bg: '#1a1a22', fg: '#cccccc' };
+  if (id === 'mezzomix')                                return { bg: '#1a0800', fg: '#ffaa44' };
+  if (id.startsWith('redbull'))                         return { bg: '#1a001a', fg: '#ffaadd' };
+  return { bg: '#111', fg: '#888' };
+}
+
+
+function refreshCounts() {
+  const counts = {};
+  grid.forEach(id => {
+    if (id) counts[id] = (counts[id] || 0) + 1;
+  });
+
+  const el = document.getElementById('counts-grid');
+  el.innerHTML = '';
+
+  if (Object.keys(counts).length === 0) {
+    el.innerHTML = '<span style="font-size:0.6rem;color:#333;letter-spacing:0.1em;text-transform:uppercase;">Paint the grid to see your shopping list</span>';
+    return;
+  }
+
+  Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([id, n]) => {
+      const can  = CAN_BY_ID[id];
+      const card = document.createElement('div');
+      card.className = 'count-card';
+      card.innerHTML = `
+        <div class="count-thumb">
+          <img src="images/${id}.png" alt="${can.name}">
+        </div>
+        <div class="count-info">
+          <strong>${n}</strong>
+          ${can.name}
+        </div>
+      `;
+      el.appendChild(card);
+    });
+}
+
+
+fillPalette();
+refreshCounts();

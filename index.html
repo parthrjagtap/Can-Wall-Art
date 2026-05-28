@@ -6,6 +6,9 @@
 <title>Can Wall Art Designer</title>
 <link rel="stylesheet" href="styles.css">
 <script src="scripts.js" defer></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+</style>
 </head>
 <body>
 
@@ -58,6 +61,28 @@
       <button onclick="loadPreset('flag')">Preset: DE Flag</button>
       <button onclick="loadPreset('chaos')">Preset: Random</button>
     </div>
+
+    <div class="matrix-section" id="matrix-section" style="display:none;">
+  <div class="matrix-header">
+    <div>
+      <div class="matrix-title">Build Matrix <em>— updates live as you paint</em></div>
+    </div>
+  </div>
+  <div class="matrix-wrap">
+    <table id="matrix-table"></table>
+  </div>
+</div>
+
+<div class="counts-section" id="counts-section" style="display:none;">
+  <div class="counts-title">Shopping List</div>
+  <div class="counts-grid" id="counts-grid"></div>
+</div>
+
+<!-- PRINT BAR -->
+<div class="print-bar" id="print-bar" style="display:none;">
+  <button class="primary" onclick="window.print()">🖨 Print Matrix + Shopping List</button>
+  
+</div>
 
     <div class="legend" id="legend"></div>
     <div class="mode-hint" id="mode-hint">Mode: Paint · Click or drag to paint</div>
