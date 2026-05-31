@@ -69,10 +69,10 @@ function gridConst() {
   gridHeight = parseInt(document.getElementById("height").value) || 10;
 
   document
-    .querySelectorAll("cols")
+    .querySelectorAll(".cols")
     .forEach((el) => (el.textContent = gridWidth));
   document
-    .querySelectorAll("rows")
+    .querySelectorAll(".rows")
     .forEach((el) => (el.textContent = gridHeight));
   document
     .querySelectorAll(".canCount")
